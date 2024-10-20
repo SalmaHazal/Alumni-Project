@@ -9,8 +9,6 @@ import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import { register } from "./controllers/auth.js";
 
-
-
 const app = express();
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
@@ -44,11 +42,29 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 /*ROUTES WITH FILES */
-app.post("/auth/register", upload.single("picture"), register); 
+app.post("/auth/register", upload.single("picture"), register);
 
 /* ROUTES */
 app.use("/auth", authRoutes);
+app.get("/api/feedbacks", async (req, res) => {
+  try {
+    const feedbackCollection = mongoose.connection.collection("goodfeedbacks");
+    const feedbacks = await feedbackCollection.find({}).toArray();
+    res.json(feedbacks);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching feedbacks", error });
+  }
+});
 
+app.get("/api/wrongfeedbacks", async (req, res) => {
+  try {
+    const feedbackCollection = mongoose.connection.collection("wrongfeedbacks");
+    const feedbacks = await feedbackCollection.find({}).toArray();
+    res.json(feedbacks);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching feedbacks", error });
+  }
+});
 
 /* MONGOOSE SETUP */
 const connectDB = async () => {
@@ -60,7 +76,7 @@ const connectDB = async () => {
   }
 };
 
-const PORT= process.env.PORT || 3002
+const PORT = process.env.PORT || 3002;
 
 // Listening to the requests
 app.listen(PORT, () => {

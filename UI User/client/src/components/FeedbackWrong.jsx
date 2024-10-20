@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { TextField, Button, Typography, MenuItem, Box } from '@mui/material';
+import React, { useState } from "react";
+import { TextField, Button, Typography, MenuItem, Box } from "@mui/material";
 import { makeRequest } from "../axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const FeedbackForm = () => {
   const navigate = useNavigate();
+  const user = useSelector((state) => state?.user);
   const [formData, setFormData] = useState({
-    area: '',    // Updated to match controller
-    details: '', // Updated to match controller
+    area: "",
+    details: "",
     file: null,
   });
 
@@ -24,16 +26,31 @@ const FeedbackForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userId = '12345';  // You may replace this with the actual user ID logic
-
-      const newFeedback = {
-        area: formData.area,      // Correct field names
-        details: formData.details, // Correct field names
-        userId: userId,
-      };
+      const feedbackData = new FormData();
+      feedbackData.append("wrongarea", formData.area);
+      feedbackData.append("wrongdetails", formData.details);
+      feedbackData.append(
+        "user",
+        JSON.stringify({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phonenumber: user.phonenumber,
+          picturePath: user.picturePath,
+        })
+      );
+      if (formData.file) {
+        feedbackData.append("media", formData.file);
+      }
 
       // Make the POST request
-      await makeRequest.post("/wrongfeedbacks", newFeedback);
+      await makeRequest.post("/wrongfeedbacks", feedbackData);
+
+      setFormData({
+        area: "",
+        details: "",
+        file: null,
+      });
 
       // Show success message
       toast.success("Wrong feedback sent successfully!");
@@ -45,7 +62,11 @@ const FeedbackForm = () => {
 
   return (
     <>
-      <Typography variant="h5" gutterBottom sx={{  marginLeft: "30%", color: "#37B7C3", fontSize: "21px" }}>
+      <Typography
+        variant="h5"
+        gutterBottom
+        sx={{ marginLeft: "30%", color: "#37B7C3", fontSize: "21px" }}
+      >
         Something went wrong
       </Typography>
 
@@ -53,7 +74,7 @@ const FeedbackForm = () => {
         <TextField
           select
           label="Choose an area"
-          name="area"  // Updated to 'area'
+          name="area" // Updated to 'area'
           value={formData.area}
           onChange={handleChange}
           fullWidth
@@ -61,9 +82,9 @@ const FeedbackForm = () => {
           variant="outlined"
           margin="normal"
           sx={{
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: '#37B7C3' },
-              '&:hover fieldset': { borderColor: '#37B7C3' },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": { borderColor: "#37B7C3" },
+              "&:hover fieldset": { borderColor: "#37B7C3" },
             },
           }}
         >
@@ -75,7 +96,7 @@ const FeedbackForm = () => {
 
         <TextField
           label="Details"
-          name="details"  // Updated to 'details'
+          name="details" // Updated to 'details'
           value={formData.details}
           onChange={handleChange}
           multiline
@@ -86,24 +107,34 @@ const FeedbackForm = () => {
           margin="normal"
           placeholder="Please include as much info as possible..."
           sx={{
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: '#37B7C3' },
-              '&:hover fieldset': { borderColor: '#37B7C3' },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": { borderColor: "#37B7C3" },
+              "&:hover fieldset": { borderColor: "#37B7C3" },
             },
           }}
         />
 
-        <Button variant="contained" component="label" sx={{ marginTop: 2, marginBottom: 2, backgroundColor: '#37B7C3' }}>
+        <Button
+          variant="contained"
+          component="label"
+          sx={{ marginTop: 2, marginBottom: 2, backgroundColor: "#37B7C3" }}
+        >
           Add a Screenshot or Video
           <input type="file" hidden onChange={handleFileChange} />
         </Button>
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: 2,
+          }}
+        >
           <Button
             variant="text"
-            sx={{ color: '#b0b3b8' }}
+            sx={{ color: "#b0b3b8" }}
             onClick={() => {
-            navigate('/Feedbackpage');
+              navigate("/Feedbackpage");
             }}
           >
             Cancel
@@ -111,13 +142,13 @@ const FeedbackForm = () => {
           <Button
             type="submit"
             variant="contained"
-            sx={{ backgroundColor: '#37B7C3' }}
+            sx={{ backgroundColor: "#37B7C3" }}
           >
             Submit
           </Button>
         </Box>
 
-        <Typography variant="body2" sx={{ marginTop: 2, color: '#37B7C3' }}>
+        <Typography variant="body2" sx={{ marginTop: 2, color: "#37B7C3" }}>
           Let us know if you have ideas that can help make our products better.
         </Typography>
       </form>

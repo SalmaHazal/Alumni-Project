@@ -3,9 +3,11 @@ import mongoose from "mongoose";
 const wrongfeedbacksSchema = new mongoose.Schema(
   {
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      firstName: { type: String, required: true },
+      lastName: { type: String, required: true },
+      email: { type: String, required: true },
+      phonenumber: { type: String, required: true },
+      picturePath: { type: String, required: true }
     },
     wrongarea: {
       type: String,

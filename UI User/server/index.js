@@ -32,7 +32,7 @@ import bcrypt from 'bcrypt';
 import { getSongs, uploading } from "./controllers/songs.js";
 import videoRoutes from "./routes/videos.js"
 import { addView } from "./controllers/video.js";
-import { AddFeedback, getFeedback, AddWrongFeedback, getWrongFeedback } from "./controllers/feedbacks.js";
+import { AddFeedback, AddWrongFeedback } from "./controllers/feedbacks.js";
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -220,8 +220,6 @@ app.put("/videos/:id/view", addView); // Increment views
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
-app.use("/api/feedbacks", upload.single('file'), feedbackRoutes);
-app.use("/api/wrongfeedbacks", upload.single('file'), wrongfeedbackRoutes);
 app.use("/api/contactus", contactusRoutes);
 app.use("/posts", postRoutes);
 app.use("/api/comments", commentRoutes);

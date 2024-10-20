@@ -30,7 +30,7 @@ const ImproveAdmin = () => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/feedbacks");
+        const response = await axios.get("http://localhost:3002/api/feedbacks");
         console.log("Fetched Feedbacks:", response.data);
         setFeedbacks(response.data);
       } catch (error) {

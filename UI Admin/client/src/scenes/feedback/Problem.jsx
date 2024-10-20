@@ -30,7 +30,7 @@ const Problem = () => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/wrongfeedbacks");
+        const response = await axios.get("http://localhost:3002/api/wrongfeedbacks");
         console.log("Fetched Feedbacks:", response.data);
         setFeedbacks(response.data);
       } catch (error) {

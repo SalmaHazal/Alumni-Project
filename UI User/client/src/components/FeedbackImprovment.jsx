@@ -14,28 +14,45 @@ const FeedbackForm = () => {
     file: null,
   });
 
+  // Handle file input change
+  const handleFileChange = (e) => {
+    setFormData((prev) => ({ ...prev, file: e.target.files[0] }));
+  };
+
+  // Handle text input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
-    setFormData((prev) => ({ ...prev, file: e.target.files[0] }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const feedbackData = new FormData();
-      feedbackData.append("wrongarea", formData.area);
-      feedbackData.append("wrongdetails", formData.details);
-      feedbackData.append("user", user._id);
+      feedbackData.append("improvementarea", formData.area);
+      feedbackData.append("improvementdetails", formData.details);
+      feedbackData.append(
+        "user",
+        JSON.stringify({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phonenumber: user.phonenumber,
+          picturePath: user.picturePath,
+        })
+      );
+
       if (formData.file) {
         feedbackData.append("media", formData.file);
       }
 
       // Make the POST request
-      await makeRequest.post("/wrongfeedbacks", feedbackData);
+      await makeRequest.post("/feedbacks", feedbackData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       setFormData({
         area: "",
@@ -43,8 +60,7 @@ const FeedbackForm = () => {
         file: null,
       });
 
-      // Show success message
-      toast.success("Wrong feedback sent successfully!");
+      toast.success("Feedback sent successfully!");
     } catch (error) {
       console.error("Error adding feedback", error);
       toast.error("Error adding feedback");
@@ -58,14 +74,14 @@ const FeedbackForm = () => {
         gutterBottom
         sx={{ marginLeft: "30%", color: "#37B7C3", fontSize: "21px" }}
       >
-        Something went wrong
+        Help Us Improve Alumni's SUD
       </Typography>
 
       <form onSubmit={handleSubmit}>
         <TextField
           select
           label="Choose an area"
-          name="area" // Updated to 'area'
+          name="area"
           value={formData.area}
           onChange={handleChange}
           fullWidth
@@ -87,7 +103,7 @@ const FeedbackForm = () => {
 
         <TextField
           label="Details"
-          name="details" // Updated to 'details'
+          name="details"
           value={formData.details}
           onChange={handleChange}
           multiline
@@ -110,7 +126,7 @@ const FeedbackForm = () => {
           component="label"
           sx={{ marginTop: 2, marginBottom: 2, backgroundColor: "#37B7C3" }}
         >
-          Add a Screenshot or Video
+          Add a Screenshot
           <input type="file" hidden onChange={handleFileChange} />
         </Button>
 

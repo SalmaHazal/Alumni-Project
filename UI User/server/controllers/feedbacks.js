@@ -9,8 +9,10 @@ export const AddFeedback = async (req, res) => {
       media = req.file.filename;
     }
 
+    const parsedUser = JSON.parse(user);
+
     const newFeedback = new GoodFeedbacks({
-      user: user,
+      user: parsedUser,
       improvementarea,
       improvementdetails,
       media,
@@ -31,9 +33,11 @@ export const AddWrongFeedback = async (req, res) => {
       media = req.file.filename;
     }
 
+    const parsedUser = JSON.parse(user);
+
     const newWrongFeedback = new WrongFeedbacks({
       wrongarea: wrongarea,
-      user: user,
+      user: parsedUser,
       wrongdetails: wrongdetails,
       media: media,
     });
