@@ -69,8 +69,8 @@ app.get("/api/wrongfeedbacks", async (req, res) => {
 // GET /users - Fetch all users from MongoDB without Mongoose model
 app.get("/users", async (req, res) => {
   try {
-    const usersCollection = mongoose.connection.collection('users'); // Accessing the users collection directly
-    const users = await usersCollection.find({}).toArray(); // Fetch all documents from users collection
+    const usersCollection = mongoose.connection.collection('users');
+    const users = await usersCollection.find({}).toArray(); 
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: "Error fetching users", error });
@@ -80,13 +80,23 @@ app.get("/users", async (req, res) => {
 // DELETE /users/:id - Delete user by ID without Mongoose model
 app.delete("/users/:id", async (req, res) => {
   try {
-    const usersCollection = mongoose.connection.collection('users'); // Accessing the users collection directly
+    const usersCollection = mongoose.connection.collection('users');
     const { id } = req.params;
-    await usersCollection.deleteOne({ _id: new mongoose.Types.ObjectId(id) }); // Deleting by ObjectId
+    await usersCollection.deleteOne({ _id: new mongoose.Types.ObjectId(id) });
     res.sendStatus(204);
   } catch (error) {
     res.status(500).json({ message: "Error deleting user", error });
   }
+});
+
+app.get("/locations", async (req, res) => {
+  try {
+    const feedbackCollection = mongoose.connection.collection("users");
+    const feedbacks = await feedbackCollection.find({}).toArray();
+    res.json(feedbacks);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching feedbacks", error });
+  }
 });
 
 /* MONGOOSE SETUP */

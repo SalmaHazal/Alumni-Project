@@ -6,14 +6,22 @@ import { tokens } from "../../theme";
 const Geography = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   return (
     <Box m="20px">
-      <Header title="Geography" subtitle="Simple Geography Chart" />
+      {/* Page Header */}
+      <Header title="Geography" subtitle="Interactive Geography Chart" />
 
+      {/* Chart Container */}
       <Box
-        height="75vh"
-        border={`1px solid ${colors.grey[100]}`}
-        borderRadius="4px"
+        height="50vh"
+        width="100%"
+        maxWidth="1000px"
+        mx="auto"
+        p="10px"
+        borderRadius="12px"
+        boxShadow={`0 4px 19px rgba(0, 0, 0, 0.1)`}
+        bgcolor={colors.primary[400]}
       >
         <GeographyChart />
       </Box>

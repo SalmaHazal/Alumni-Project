@@ -56,7 +56,7 @@ const UserLocations = () => {
             lastName: user.lastName,
             promotion: user.promotion,
             email: user.email,
-            picturePath: user.picturePath || "default.png", // Use default image if picturePath is empty
+            picturePath: user.picturePath || "default.png",
           });
         } else {
           console.error(`No match found for ${user.location}`);

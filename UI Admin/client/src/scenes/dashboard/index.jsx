@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import EmailIcon from "@mui/icons-material/Email";
@@ -20,7 +20,7 @@ const Dashboard = () => {
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD"/>
+        <Header title="DASHBOARD" />
       </Box>
 
       {/* GRID & CHARTS */}
@@ -117,7 +117,7 @@ const Dashboard = () => {
           <Box
             mt="25px"
             p="0 30px"
-            display="flex "
+            display="flex"
             justifyContent="space-between"
             alignItems="center"
           >
@@ -181,6 +181,8 @@ const Dashboard = () => {
           gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
+          height="410px"
+         
         >
           <Typography
             variant="h5"
@@ -197,7 +199,9 @@ const Dashboard = () => {
           gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
-          padding="30px"
+          padding="20px"
+          height="410px"
+      
         >
           <Typography
             variant="h5"
@@ -206,7 +210,8 @@ const Dashboard = () => {
           >
             Geography Based Traffic
           </Typography>
-          <Box height="200px">
+          <Box height="250px" mt="20px">
+            {/* GeographyChart component adjusted for full height */}
             <GeographyChart isDashboard={true} />
           </Box>
         </Box>
