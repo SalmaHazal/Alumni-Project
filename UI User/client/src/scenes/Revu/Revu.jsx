@@ -11,7 +11,7 @@ import {
 import HomeIcon from "@mui/icons-material/Home";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
-import RadioIcon from "@mui/icons-material/PhotoLibrary";
+import { FaRadio } from "react-icons/fa6";
 import LamaTube from "../../../public/assets/logo.png";
 import Navbar from "../navbar/Navbar";
 import WidgetWrapper from "../../components/WidgetWrapper";
@@ -59,7 +59,7 @@ const Revu = () => {
                 path: "/Revu/gallery",
               },
               {
-                icon: <RadioIcon />,
+                icon: <FaRadio size="20px" />,
                 text: "Radio",
                 path: "/Revu/Radio",
               },
