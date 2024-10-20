@@ -1,34 +1,37 @@
-import { Box, IconButton, useTheme } from "@mui/material";
-import { useContext } from "react";
-import { ColorModeContext, tokens } from "../../theme";
-import InputBase from "@mui/material/InputBase";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import SearchIcon from "@mui/icons-material/Search";
+import React from "react";
+import { Box, Button, useTheme } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setLogout } from "../../state";
 
 const Topbar = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const colorMode = useContext(ColorModeContext);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(setLogout());
+    navigate("/");
+  };
 
   return (
-    <Box display="flex" justifyContent="end" p={2}>
-
-      {/* ICONS */}
-      <Box display="flex">
-        <IconButton>
-          <NotificationsOutlinedIcon />
-        </IconButton>
-        <IconButton>
-          <SettingsOutlinedIcon />
-        </IconButton>
-        <IconButton>
-          <PersonOutlinedIcon />
-        </IconButton>
-      </Box>
+    <Box
+      display="flex"
+      width="10%"
+      justifyContent="end"
+      p={2}
+      flexDirection="column"
+    >
+      {/* LOGOUT BUTTON */}
+      <Button
+        variant="contained"
+        color="secondary"
+        startIcon={<LogoutIcon />}
+        onClick={handleLogout}
+        sx={{ marginBottom: "10px" }}
+      >
+        Logout
+      </Button>
     </Box>
   );
 };

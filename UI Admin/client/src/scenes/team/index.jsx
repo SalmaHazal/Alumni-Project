@@ -1,17 +1,40 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataTeam } from "../../data/mockData";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+import { useEffect, useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Header from "../../components/Header";
+import axios from "axios";  // For making API calls
 
 const Team = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [users, setUsers] = useState([]);
+
+  // Fetch users from MongoDB on component mount
+  useEffect(() => {
+    axios.get("http://localhost:3002/users")
+      .then((response) => {
+        setUsers(response.data); // Assuming response contains the users array
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+  }, []);
+
+  // Function to delete a user
+  const handleDeleteUser = (userId) => {
+    axios.delete(`http://localhost:3002/users/${userId}`)
+      .then(() => {
+        setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+      })
+      .catch((error) => {
+        console.error("Error deleting user:", error);
+      });
+  };
+
   const columns = [
-    { field: "id", headerName: "ID" },
+    { field: "id", headerName: "ID", hide: true },
     {
       field: "name",
       headerName: "Name",
@@ -19,52 +42,29 @@ const Team = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "phone",
-      headerName: "Phone Number",
-      flex: 1,
-    },
-    {
       field: "email",
       headerName: "Email",
       flex: 1,
     },
     {
-      field: "accessLevel",
-      headerName: "Access Level",
+      field: "promotion",
+      headerName: "Promotion ",
       flex: 1,
-      renderCell: ({ row: { access } }) => {
-        return (
-          <Box
-            width="60%"
-            m="0 auto"
-            p="5px"
-            display="flex"
-            justifyContent="center"
-            backgroundColor={
-              access === "admin"
-                ? colors.greenAccent[600]
-                : access === "manager"
-                ? colors.greenAccent[700]
-                : colors.greenAccent[700]
-            }
-            borderRadius="4px"
-          >
-            {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-            {access === "manager" && <SecurityOutlinedIcon />}
-            {access === "user" && <LockOpenOutlinedIcon />}
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {access}
-            </Typography>
-          </Box>
-        );
-      },
+      renderCell: ({ value }) => (
+        <Typography color={colors.grey[100]}>
+          {value} {/* Displaying the numeric promotion value directly */}
+        </Typography>
+      ),
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 0.5,
+      renderCell: (params) => (
+        <IconButton onClick={() => handleDeleteUser(params.row._id)}>
+          <DeleteIcon sx={{ color: colors.redAccent[600] }} />
+        </IconButton>
+      ),
     },
   ];
 
@@ -100,7 +100,15 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} />
+        <DataGrid 
+          checkboxSelection 
+          rows={users.map((user) => ({ 
+            ...user, 
+            id: user._id, // Ensure unique ID is used
+            name: `${user.firstName} ${user.lastName}`,
+          }))} 
+          columns={columns} 
+        />
       </Box>
     </Box>
   );

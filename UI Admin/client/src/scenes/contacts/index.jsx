@@ -1,17 +1,28 @@
-import { Box } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { Box, Typography, useTheme } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataContacts } from "../../data/mockData";
+import { useEffect, useState } from "react";
 import Header from "../../components/Header";
-import { useTheme } from "@mui/material";
+import axios from "axios";  // For making API calls
 
 const Contacts = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [users, setUsers] = useState([]);
+
+  // Fetch users from MongoDB on component mount
+  useEffect(() => {
+    axios.get("http://localhost:3002/users")
+      .then((response) => {
+        setUsers(response.data); // Assuming response contains the users array
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
+  }, []);
 
   const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "registrarId", headerName: "Registrar ID" },
+    { field: "id", headerName: "ID", hide: true },
     {
       field: "name",
       headerName: "Name",
@@ -19,45 +30,40 @@ const Contacts = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "phone",
-      headerName: "Phone Number",
-      flex: 1,
-    },
-    {
       field: "email",
       headerName: "Email",
       flex: 1,
     },
     {
-      field: "address",
-      headerName: "Address",
+      field: "linkedinLink",
+      headerName: "LinkedIn",
+      flex: 1,
+      renderCell: (params) => (
+        <a href={params.value} target="_blank" rel="noopener noreferrer" style={{ color: colors.blueAccent[500] }}>
+          LinkedIn Profile
+        </a>
+      ),
+    },
+    {
+      field: "phoneNumber",
+      headerName: "Phone Number",
       flex: 1,
     },
     {
-      field: "city",
-      headerName: "City",
+      field: "occupation",
+      headerName: "Occupation",
       flex: 1,
     },
     {
-      field: "zipCode",
-      headerName: "Zip Code",
+      field: "promotion",
+      headerName: "Promotion",
       flex: 1,
     },
   ];
 
   return (
     <Box m="20px">
-      <Header
-        title="CONTACTS"
-        subtitle="List of Contacts for Future Reference"
-      />
+      <Header title="Contacts" subtitle="Getting the Members contats" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -85,15 +91,21 @@ const Contacts = () => {
           "& .MuiCheckbox-root": {
             color: `${colors.greenAccent[200]} !important`,
           },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.grey[100]} !important`,
-          },
         }}
       >
-        <DataGrid
-          rows={mockDataContacts}
-          columns={columns}
-          components={{ Toolbar: GridToolbar }}
+        <DataGrid 
+          checkboxSelection 
+          rows={users.map((user, index) => ({ 
+            ...user, 
+            id: index + 1, 
+            name: `${user.firstName} ${user.lastName}`,
+            email: user.email,
+            linkedinLink: user.linkedInLink,
+            phoneNumber: user.phonenumber,
+            occupation: user.occupation,
+            promotion: user.promotion
+          }))} 
+          columns={columns} 
         />
       </Box>
     </Box>
