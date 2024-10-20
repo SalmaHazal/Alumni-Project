@@ -69,8 +69,8 @@ app.get("/api/wrongfeedbacks", async (req, res) => {
 // GET /users - Fetch all users from MongoDB without Mongoose model
 app.get("/users", async (req, res) => {
   try {
-    const usersCollection = mongoose.connection.collection('users');
-    const users = await usersCollection.find({}).toArray(); 
+    const usersCollection = mongoose.connection.collection("users");
+    const users = await usersCollection.find({}).toArray();
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: "Error fetching users", error });
@@ -80,7 +80,7 @@ app.get("/users", async (req, res) => {
 // DELETE /users/:id - Delete user by ID without Mongoose model
 app.delete("/users/:id", async (req, res) => {
   try {
-    const usersCollection = mongoose.connection.collection('users');
+    const usersCollection = mongoose.connection.collection("users");
     const { id } = req.params;
     await usersCollection.deleteOne({ _id: new mongoose.Types.ObjectId(id) });
     res.sendStatus(204);
@@ -95,9 +95,39 @@ app.get("/locations", async (req, res) => {
     const feedbacks = await feedbackCollection.find({}).toArray();
     res.json(feedbacks);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching feedbacks", error });
-  }
+    res.status(500).json({ message: "Error fetching feedbacks", error });
+  }
 });
+
+
+app.get("/api/users/cities", async (req, res) => {
+  try {
+    const usersGroupedByCity = await mongoose.connection
+      .collection("users")
+      .aggregate([
+        {
+          $group: {
+            _id: "$location",
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $project: {
+            city: "$_id",
+            count: 1,
+          },
+        },
+      ])
+      .toArray();
+
+    res.json(usersGroupedByCity);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching user data" });
+  }
+});
+
+
 
 /* MONGOOSE SETUP */
 const connectDB = async () => {
