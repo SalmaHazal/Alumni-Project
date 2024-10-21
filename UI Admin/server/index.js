@@ -98,6 +98,43 @@ app.get("/locations", async (req, res) => {
     res.status(500).json({ message: "Error fetching feedbacks", error });
   }
 });
+app.get("/api/users/promotion", async (req, res) => {
+  try {
+    const usersGroupedByCityAndPromo = await mongoose.connection
+      .collection("users")
+      .aggregate([
+        {
+          $group: {
+            _id: {
+              city: "$location",
+              promotion: "$promotion", 
+            },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $group: {
+            _id: "$_id.city", 
+            users: { $sum: "$count" }, 
+            promotions: { $push: { promotion: "$_id.promotion", count: "$count" } }, 
+          },
+        },
+        {
+          $project: {
+            city: "$_id",
+            users: 1,
+            promotions: 1,
+          },
+        },
+      ])
+      .toArray();
+
+    res.json(usersGroupedByCityAndPromo);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching user data" });
+  }
+});
 
 
 app.get("/api/users/cities", async (req, res) => {

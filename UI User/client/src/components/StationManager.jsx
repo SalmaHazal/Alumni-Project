@@ -52,13 +52,13 @@ const StationManager = ({
     >
       <Box>
         <Typography variant="h1" sx={{ fontSize: '2rem', marginBottom: '1rem', fontFamily: 'Pacifico, cursive' }}>
-          Alumni<span style={{ color: '#db602c' }}>radio</span>
+          Alumni<span style={{ color: '#36C2CE' }}>radio</span>
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-around', marginBottom: '1rem' }}>
           <Button
             ref={allButtonRef}
             onClick={showAllStationsHandler}
-            variant="outlined"
+            variant="contained"
             sx={{
               width: '45%',
               fontSize: '0.75em',
@@ -76,7 +76,7 @@ const StationManager = ({
           <Button
             ref={favButtonRef}
             onClick={showFavStationsHandler}
-            variant="outlined"
+            variant="contained"
             sx={{
               width: '45%',
               fontSize: '0.75em',

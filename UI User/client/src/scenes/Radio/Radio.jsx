@@ -1,10 +1,7 @@
 import React, { useState, useRef } from 'react';
-// Components
 import StationManager from '../../components/StationManager';
 import PlayManager from '../../components/PlayManager';
-// Material-UI components
 import { Box } from '@mui/material';
-// Global styles
 import GlobalStyle from '../../components/GlobalStyles';
 import Navbar from '../navbar/Navbar';
 import WidgetWrapper from '../../components/WidgetWrapper';
@@ -39,7 +36,7 @@ function Radio() {
 
   return (
     <>
-      <GlobalStyle />
+      
       <Box 
         sx={{ 
           display: 'flex', 

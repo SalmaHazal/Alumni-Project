@@ -23,6 +23,7 @@ import serviceRoutes from "./routes/service.js";
 import { register } from "./controllers/auth.js";
 import { createAlbum, getAlbums, getAlbumById } from "./controllers/albumController.js";
 import contactusRoutes from "./routes/contactus.js";
+import planingcallRoutes from "./routes/planingcall.js";
 import { createPost } from "./controllers/posts.js";
 import { updateUserProfile } from "./controllers/users.js";
 import { verifyToken } from "./middleware/auth.js";
@@ -221,6 +222,7 @@ app.put("/videos/:id/view", addView); // Increment views
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/api/contactus", contactusRoutes);
+app.use("/api/planingcall", planingcallRoutes);
 app.use("/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/locations", locationRoutes);

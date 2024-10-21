@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-// MUI Components
 import { Box, Typography, IconButton, useTheme } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -21,7 +20,7 @@ const PlayManager = ({
   setIsPlaying,
   audioRef,
 }) => {
-  // Effects with dependency
+
   useEffect(() => {
     if (isPlaying) {
       const playPromise = audioRef.current.play();
@@ -34,7 +33,6 @@ const PlayManager = ({
       }
     }
 
-    // Media Session API
     if ('mediaSession' in navigator) {
       navigator.mediaSession.metadata = new window.MediaMetadata({
         title: currentStation.name,
@@ -56,7 +54,7 @@ const PlayManager = ({
     }
   }, [currentStation, isPlaying]);
 
-  // Handlers
+
   const previousStationHandler = () => {
     const id = currentPlayList.findIndex((station) => station.id === currentStation.id);
     const prevId = id - 1;
@@ -81,7 +79,7 @@ const PlayManager = ({
     }
   };
 
-  // Use theme
+
   const theme = useTheme();
   const { palette } = theme;
 
